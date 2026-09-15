@@ -140,10 +140,13 @@ export default function App() {
   }, []);
 
   const drawCard = () => {
-    const filtered = cardsData.filter((c) => c.categoria === category);
+    // Normalizamos el string para evitar fallas por espacios o mayúsculas en el CSV
+    const filtered = cardsData.filter(
+      (c) => c.categoria && c.categoria.toLowerCase().trim() === category.toLowerCase().trim()
+    );
+
     if (filtered.length === 0) return;
 
-    // Si hay más de una carta, aseguramos elegir una DISTINTA a la actual
     let nextCard = currentCard;
     if (filtered.length > 1) {
       while (nextCard === currentCard) {
