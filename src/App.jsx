@@ -1,52 +1,75 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, Skull, BookOpen, Shuffle, Volume2, VolumeX } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
-// Generador sintético de sonidos con Web Audio API
-const playSound = (type) => {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+import imgTeoria from './assets/1.png';
+import imgRecuperatorio from './assets/2.png';
+import imgPrimeraVuelta from './assets/3.png';
 
-  const now = ctx.currentTime;
+const playSound = (type, soundEnabled = true) => {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    const now = ctx.currentTime;
 
-  if (type === 'flip') {
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(150, now);
-    osc.frequency.exponentialRampToValueAtTime(400, now + 0.15);
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-    osc.start(now);
-    osc.stop(now + 0.15);
-  } else if (type === 'select') {
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(440, now);
-    osc.frequency.setValueAtTime(880, now + 0.08);
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-    osc.start(now);
-    osc.stop(now + 0.2);
-  } else if (type === 'fire') {
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(80, now);
-    osc.frequency.linearRampToValueAtTime(40, now + 0.3);
-    gain.gain.setValueAtTime(0.4, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-    osc.start(now);
-    osc.stop(now + 0.3);
+    if (type === 'flip') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(200, now);
+      osc.frequency.exponentialRampToValueAtTime(600, now + 0.18);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+      osc.start(now);
+      osc.stop(now + 0.18);
+    } else if (type === 'easy') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.setValueAtTime(659.25, now + 0.08);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+      osc.start(now);
+      osc.stop(now + 0.25);
+    } else if (type === 'hard') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(120, now);
+      osc.frequency.linearRampToValueAtTime(60, now + 0.3);
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    } else if (type === 'theory') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.setValueAtTime(880, now + 0.1);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+      osc.start(now);
+      osc.stop(now + 0.25);
+    }
+  } catch (e) {
+    console.error(e);
   }
 };
 
-// Parser liviano de CSV integrado
 const parseCSV = (text) => {
   const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map((h) => h.trim());
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
   return lines.slice(1).map((line) => {
-    const values = line.split(',').map((v) => v.trim());
-    return headers.reduce((acc, header, index) => {
-      acc[header] = values[index];
-      return acc;
-    }, {});
+    const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+    const obj = {};
+    headers.forEach((header, i) => {
+      let val = values[i] ? values[i].trim() : '';
+      if (val.startsWith('"') && val.endsWith('"')) {
+        val = val.substring(1, val.length - 1);
+      }
+      obj[header] = val;
+    });
+    return obj;
   });
 };
 
@@ -54,10 +77,51 @@ export default function App() {
   const [cardsData, setCardsData] = useState([]);
   const [category, setCategory] = useState('primera_vuelta');
   const [currentCard, setCurrentCard] = useState(null);
-  const [isFlipping, setIsFlipping] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
-  // Cargar datos del CSV
+  const themes = {
+    primera_vuelta: {
+      id: 'primera_vuelta',
+      title: 'Primera Vuelta',
+      subtitle: 'Fácil',
+      icon: Sparkles,
+      bgColor: '#064e3b',
+      activeTabBg: '#059669',
+      cardBg: imgPrimeraVuelta,
+      textColor: '#064e3b',
+      badgeBg: '#047857',
+      sound: 'easy'
+    },
+    recuperatorio: {
+      id: 'recuperatorio',
+      title: 'Recuperatorio',
+      subtitle: 'Difícil',
+      icon: Skull,
+      bgColor: '#450a0a',
+      activeTabBg: '#dc2626',
+      cardBg: imgRecuperatorio,
+      textColor: '#7f1d1d',
+      badgeBg: '#991b1b',
+      sound: 'hard'
+    },
+    teoria: {
+      id: 'teoria',
+      title: 'Teoría',
+      subtitle: 'Conceptos',
+      icon: BookOpen,
+      bgColor: '#0f172a',
+      activeTabBg: '#2563eb',
+      cardBg: imgTeoria,
+      textColor: '#1e3a8a',
+      badgeBg: '#1d4ed8',
+      sound: 'theory'
+    }
+  };
+
+  const currentTheme = themes[category];
+
   useEffect(() => {
     fetch('/datos.csv')
       .then((res) => res.text())
@@ -66,166 +130,261 @@ export default function App() {
         setCardsData(parsed);
         setLoading(false);
       })
-      .catch((err) => console.error('Error al cargar el CSV:', err));
+      .catch((err) => {
+        console.error('Error cargando CSV:', err);
+        setLoading(false);
+      });
   }, []);
 
-  // Configuración de branding por categoría
-  const branding = {
-    primera_vuelta: {
-      title: 'Primera Vuelta',
-      bgClass: 'bg-amber-50 text-emerald-950',
-      headerBg: 'bg-emerald-700 text-amber-100 border-amber-300',
-      btnActive: 'bg-emerald-600 text-amber-100 shadow-emerald-400/50 shadow-lg scale-105',
-      btnInactive: 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200',
-      cardBorder: 'border-amber-400/60 shadow-amber-200',
-      cardBgImg: '/3.png',
-      textColor: 'text-emerald-950',
-      badgeBg: 'bg-emerald-800 text-amber-200',
-      sound: 'select'
-    },
-    recuperatorio: {
-      title: 'Carta de Recuperatorio',
-      bgClass: 'bg-black text-red-500',
-      headerBg: 'bg-red-950 text-red-500 border-red-600',
-      btnActive: 'bg-red-700 text-black font-bold shadow-red-600/60 shadow-lg scale-105 border border-red-500',
-      btnInactive: 'bg-neutral-900 text-red-700 hover:bg-neutral-800',
-      cardBorder: 'border-red-600/80 shadow-red-900/50',
-      cardBgImg: '/2.png',
-      textColor: 'text-red-100',
-      badgeBg: 'bg-red-950 text-red-400 border border-red-600',
-      sound: 'fire'
-    },
-    teoria: {
-      title: 'Teoría',
-      bgClass: 'bg-slate-100 text-blue-950',
-      headerBg: 'bg-blue-900 text-cyan-200 border-blue-400',
-      btnActive: 'bg-blue-700 text-cyan-200 shadow-blue-400/40 shadow-lg scale-105',
-      btnInactive: 'bg-slate-200 text-blue-800 hover:bg-slate-300',
-      cardBorder: 'border-blue-400/60 shadow-blue-200',
-      cardBgImg: '/1.png',
-      textColor: 'text-blue-950',
-      badgeBg: 'bg-blue-950 text-cyan-300',
-      sound: 'select'
-    }
-  };
-
-  const currentTheme = branding[category];
-
-  // Selección de carta aleatoria
-  const drawRandomCard = () => {
-    const filtered = cardsData.filter((item) => item.categoria === category);
+  const drawCard = () => {
+    const filtered = cardsData.filter((c) => c.categoria === category);
     if (filtered.length === 0) return;
 
-    setIsFlipping(true);
-    playSound('flip');
+    playSound('flip', soundEnabled);
+    setIsFlipped(true);
 
     setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * filtered.length);
       setCurrentCard(filtered[randomIndex]);
-      setIsFlipping(false);
+      setIsFlipped(false);
+
+      if (category === 'primera_vuelta') {
+        confetti({ particleCount: 20, spread: 40, origin: { y: 0.7 } });
+      }
     }, 200);
   };
 
-  const changeCategory = (cat) => {
-    setCategory(cat);
+  const handleCategoryChange = (catId) => {
+    setCategory(catId);
     setCurrentCard(null);
-    playSound(branding[cat].sound);
+    playSound(themes[catId].sound, soundEnabled);
   };
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-900 text-white">
-        <p className="animate-pulse text-xl">Cargando cartas desde CSV...</p>
+      <div style={{ height: '100vh', width: '100vw', backgroundColor: '#09090b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+        <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '2px' }}>Cargando datos...</p>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen flex flex-col justify-between p-4 transition-colors duration-500 font-sans select-none ${currentTheme.bgClass}`}>
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#000', overflow: 'hidden' }}>
       
-      {/* Header con Selector de Categorías */}
-      <header className="w-full max-w-md mx-auto mb-4">
-        <h1 className={`text-center text-xl font-black uppercase tracking-wider py-2 px-4 rounded-xl border-2 mb-4 shadow-md ${currentTheme.headerBg}`}>
-          {currentTheme.title}
-        </h1>
-        <div className="grid grid-cols-3 gap-2">
-          <button
-            onClick={() => changeCategory('primera_vuelta')}
-            className={`py-2 px-1 text-xs font-bold rounded-lg transition-all ${
-              category === 'primera_vuelta' ? branding.primera_vuelta.btnActive : branding.primera_vuelta.btnInactive
-            }`}
-          >
-            Fácil
-          </button>
-          <button
-            onClick={() => changeCategory('recuperatorio')}
-            className={`py-2 px-1 text-xs font-bold rounded-lg transition-all ${
-              category === 'recuperatorio' ? branding.recuperatorio.btnActive : branding.recuperatorio.btnInactive
-            }`}
-          >
-            Recuperatorio
-          </button>
-          <button
-            onClick={() => changeCategory('teoria')}
-            className={`py-2 px-1 text-xs font-bold rounded-lg transition-all ${
-              category === 'teoria' ? branding.teoria.btnActive : branding.teoria.btnInactive
-            }`}
-          >
-            Teoría
-          </button>
-        </div>
-      </header>
-
-      {/* ÁREA CENTRAL / CARTA TAPABLE */}
-      <main className="flex-1 flex items-center justify-center my-auto cursor-pointer" onClick={drawRandomCard}>
-        <div
-          className={`relative w-full max-w-xs aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-4 transition-transform duration-300 ${
-            currentTheme.cardBorder
-          } ${isFlipping ? 'scale-95 rotate-2 opacity-80' : 'scale-100 opacity-100 hover:scale-105'}`}
+      {/* Marco simulador de celular */}
+      <div style={{
+        width: '100%',
+        maxWidth: '380px',
+        height: '100%',
+        maxHeight: '800px',
+        backgroundColor: currentTheme.bgColor,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: '16px',
+        position: 'relative',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        transition: 'background-color 0.4s ease'
+      }}>
+        
+        {/* Botón Mute */}
+        <button
+          onClick={() => setSoundEnabled(!soundEnabled)}
+          style={{
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            zIndex: 50,
+            padding: '8px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.2)',
+            cursor: 'pointer'
+          }}
         >
-          {/* Imagen de fondo de la carta */}
-          <img
-            src={currentTheme.cardBgImg}
-            alt={currentTheme.title}
-            className="absolute inset-0 w-full h-full object-fill pointer-events-none"
-          />
+          {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+        </button>
 
-          {/* Contenido superpuesto */}
-          <div className="relative z-10 h-full flex flex-col justify-between p-8 text-center bg-black/5">
-            {currentCard ? (
-              <>
-                {/* Número superior */}
-                <div className="flex justify-end">
-                  <span className={`text-xs font-black px-2.5 py-1 rounded-full shadow ${currentTheme.badgeBg}`}>
-                    #{currentCard.numero}
-                  </span>
-                </div>
-
-                {/* Enunciado */}
-                <div className="my-auto px-2">
-                  <p className={`text-lg md:text-xl font-bold leading-relaxed drop-shadow-md ${currentTheme.textColor}`}>
-                    {currentCard.enunciado}
-                  </p>
-                </div>
-
-                <p className="text-[10px] opacity-60 tracking-widest uppercase">Toca para otra carta</p>
-              </>
-            ) : (
-              <div className="my-auto flex flex-col items-center justify-center gap-3">
-                <span className="text-4xl animate-bounce">🃏</span>
-                <p className={`text-base font-extrabold uppercase tracking-wider ${currentTheme.textColor}`}>
-                  Toca la pantalla para obtener una carta
-                </p>
-              </div>
-            )}
+        {/* HEADER */}
+        <header style={{ width: '100%', zIndex: 10 }}>
+          <div style={{ textAlign: 'center', marginBottom: '12px' }}>
+            <h1 style={{ fontSize: '20px', fontWeight: '900', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: 0 }}>
+              {React.createElement(currentTheme.icon, { size: 20 })}
+              {currentTheme.title}
+            </h1>
           </div>
-        </div>
-      </main>
 
-      {/* Footer / Info */}
-      <footer className="text-center text-xs opacity-70 py-2">
-        <p>Categoría activa: <span className="font-bold">{currentTheme.title}</span></p>
-      </footer>
+          {/* Navegador por Tabs */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 1fr',
+            gap: '6px',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            padding: '4px',
+            borderRadius: '12px',
+            border: '1px solid rgba(255,255,255,0.1)'
+          }}>
+            {Object.values(themes).map((t) => {
+              const Icon = t.icon;
+              const isActive = category === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => handleCategoryChange(t.id)}
+                  style={{
+                    padding: '8px 4px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: isActive ? t.activeTabBg : 'transparent',
+                    color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    fontSize: '11px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Icon size={14} />
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>{t.title}</span>
+                </button>
+              );
+            })}
+          </div>
+        </header>
+
+        {/* CONTENEDOR DE LA CARTA (AQUÍ ESTÁ EL FIX DE TAMAÑO) */}
+        <main style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          maxHeight: '480px',
+          margin: '12px 0',
+          position: 'relative'
+        }}>
+          <motion.div
+            onClick={drawCard}
+            whileTap={{ scale: 0.95 }}
+            animate={{
+              rotateY: isFlipped ? 90 : 0,
+              scale: isFlipped ? 0.92 : 1
+            }}
+            transition={{ duration: 0.18 }}
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '280px',
+              height: '100%',
+              maxHeight: '420px',
+              aspectRatio: '3 / 4.2',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.6)'
+            }}
+          >
+            {/* Imagen delimitada por CSS directo */}
+            <img
+              src={currentTheme.cardBg}
+              alt={currentTheme.title}
+              className="card-image-fix"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                pointerEvents: 'none'
+              }}
+            />
+
+            {/* Contenido en el centro de la carta */}
+            <div style={{
+              position: 'relative',
+              zIndex: 10,
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              padding: '28px 24px',
+              boxSizing: 'border-box'
+            }}>
+              <AnimatePresence mode="wait">
+                {currentCard ? (
+                  <motion.div
+                    key={currentCard.id || currentCard.numero}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{
+                        fontSize: '10px',
+                        fontWeight: '900',
+                        padding: '2px 8px',
+                        borderRadius: '12px',
+                        backgroundColor: currentTheme.badgeBg,
+                        color: '#fff'
+                      }}>
+                        #{currentCard.numero}
+                      </span>
+                      <Shuffle size={14} style={{ color: 'rgba(0,0,0,0.3)' }} />
+                    </div>
+
+                    <div style={{ margin: 'auto 0', padding: '0 4px' }}>
+                      <p style={{
+                        textAlign: 'center',
+                        fontSize: '15px',
+                        fontWeight: '800',
+                        lineHeight: '1.3',
+                        color: currentTheme.textColor,
+                        margin: 0
+                      }}>
+                        {currentCard.enunciado}
+                      </p>
+                    </div>
+
+                    <div style={{ textAlign: 'center' }}>
+                      <span style={{ fontSize: '8px', fontWeight: 'bold', letterSpacing: '1px', color: 'rgba(0,0,0,0.4)', textTransform: 'uppercase' }}>
+                        Toca para cambiar
+                      </span>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
+                  >
+                    <Shuffle size={24} style={{ color: 'rgba(0,0,0,0.4)', marginBottom: '8px' }} />
+                    <h3 style={{ fontSize: '13px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '1px', color: currentTheme.textColor, margin: 0 }}>
+                      Toca la carta
+                    </h3>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </main>
+
+        <footer style={{ width: '100%', textAlign: 'center', zIndex: 10 }}>
+          <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+            Toca en cualquier parte de la carta para sacar otra
+          </p>
+        </footer>
+      </div>
     </div>
   );
 }
