@@ -54,25 +54,40 @@ const playSound = (type, soundEnabled = true) => {
     console.error(e);
   }
 };
-
 const parseCSV = (text) => {
-  const lines = text.trim().split('\n');
+  const lines = text.trim().split(/\r?\n/);
   if (lines.length < 2) return [];
-  const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
+
+  // Limpia comillas y espacios de los encabezados
+  const headers = lines[0]
+    .split(',')
+    .map((h) => h.replace(/^"|"$/g, '').trim().toLowerCase());
+
   return lines.slice(1).map((line) => {
-    const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
-    const obj = {};
-    headers.forEach((header, i) => {
-      let val = values[i] ? values[i].trim() : '';
-      if (val.startsWith('"') && val.endsWith('"')) {
-        val = val.substring(1, val.length - 1);
+    const values = [];
+    let insideQuotes = false;
+    let currentValue = '';
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        insideQuotes = !insideQuotes;
+      } else if (char === ',' && !insideQuotes) {
+        values.push(currentValue.trim().replace(/^"|"$/g, ''));
+        currentValue = '';
+      } else {
+        currentValue += char;
       }
-      obj[header] = val;
+    }
+    values.push(currentValue.trim().replace(/^"|"$/g, ''));
+
+    const obj = {};
+    headers.forEach((header, index) => {
+      obj[header] = values[index] || '';
     });
     return obj;
   });
 };
-
 export default function App() {
   const [cardsData, setCardsData] = useState([]);
   const [category, setCategory] = useState('primera_vuelta');
@@ -140,10 +155,9 @@ export default function App() {
   }, []);
 
   const drawCard = () => {
-    // Normalizamos el string para evitar fallas por espacios o mayúsculas en el CSV
-    const filtered = cardsData.filter(
-      (c) => c.categoria && c.categoria.toLowerCase().trim() === category.toLowerCase().trim()
-    );
+const filtered = cardsData.filter(
+  (c) => c.categoria && c.categoria.toLowerCase().replace(/"/g, '').trim() === category.toLowerCase().trim()
+);
 
     if (filtered.length === 0) return;
 
