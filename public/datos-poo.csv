@@ -1,0 +1,131 @@
+id,categoria,numero,enunciado
+1,primera_vuelta,1,Agregar la función de dar Me Gusta (like) en un post de un usuario
+2,primera_vuelta,2,Agregar la función de comentar en un post de un usuario
+3,primera_vuelta,3,Agregar la función de eliminar un post propio
+4,primera_vuelta,4,Agregar la función de editar el contenido de un post propio
+5,primera_vuelta,5,Agregar la función de compartir un post con otro usuario
+6,primera_vuelta,6,Agregar la función de quitar el Me Gusta de un post previamente dado
+7,primera_vuelta,7,Agregar la función de listar todos los posts de un usuario específico
+8,primera_vuelta,8,Agregar la función de buscar posts por palabra clave en el título o contenido
+9,primera_vuelta,9,Agregar la función de filtrar posts por una etiqueta (tag) específica
+10,primera_vuelta,10,Agregar la función de obtener la cantidad total de comentarios de un post
+11,primera_vuelta,11,Agregar la función de eliminar un comentario propio en un post
+12,primera_vuelta,12,Agregar la función de fijar (pin) un post propio en el perfil
+13,primera_vuelta,13,Agregar la función de cambiar el estado de un post a borrador
+14,primera_vuelta,14,Agregar la función de listar los posts más populares (con mayor cantidad de Me Gusta)
+15,primera_vuelta,15,Agregar la función de reportar un post por contenido inapropiado
+16,primera_vuelta,16,Agregar la función de guardar un post en la lista de marcadores/favoritos
+17,primera_vuelta,17,Agregar la función de ver la lista de posts guardados en favoritos
+18,primera_vuelta,18,Agregar la función de quitar un post de la lista de favoritos
+19,primera_vuelta,19,Agregar la función de listar los usuarios que le dieron Me Gusta a un post
+20,primera_vuelta,20,Agregar la función de editar un comentario propio previamente realizado
+21,primera_vuelta,21,Agregar la función de responder a un comentario específico dentro de un post
+22,primera_vuelta,22,"Agregar la función de cambiar la visibilidad de un post (Público, Solo Amigos, Privado)"
+23,primera_vuelta,23,Agregar la función de listar los posts publicados en un rango de fechas determinado
+24,primera_vuelta,24,"Agregar la función de obtener métricas del perfil (total de posts, likes y comentarios)"
+25,primera_vuelta,25,Agregar la función de añadir múltiples etiquetas (tags) a un post
+26,primera_vuelta,26,Agregar la función de remover una etiqueta específica de un post
+27,primera_vuelta,27,Agregar la función de duplicar un post propio como un nuevo borrador
+28,primera_vuelta,28,Agregar la función de archivar o desarchivar un post propio
+29,primera_vuelta,19,Agregar la función de ordenar los posts del feed por fecha (más recientes / más antiguos)
+30,primera_vuelta,30,Agregar la función de deshabilitar la sección de comentarios en un post propio
+101,teoria,1,"¿Qué es una clase en Programación Orientada a Objetos?"
+102,teoria,2,"¿Qué es un objeto en POO?"
+103,teoria,3,"¿Qué principio de POO oculta la complejidad interna y expone solo lo esencial?"
+104,teoria,4,"¿Qué principio de POO permite que una clase hija adquiera atributos y métodos de una clase padre?"
+105,teoria,5,"¿Qué es el encapsulamiento?"
+106,teoria,6,"¿Qué es el polimorfismo en POO?"
+107,teoria,7,"¿Cuál es la diferencia principal entre una clase y una interfaz en C#?"
+108,teoria,8,"¿Qué modificador de acceso permite ver un miembro solo desde la misma clase y sus clases derivadas?"
+109,teoria,9,"¿Qué modificador de acceso restringe la visibilidad exclusivamente a la misma clase donde se declara?"
+110,teoria,10,"¿Qué palabra clave se usa en C# para heredar de una clase o implementar una interfaz?"
+111,teoria,11,"¿Qué es un constructor en una clase de C#?"
+112,teoria,12,"¿Qué es la sobrecarga de métodos o constructores?"
+113,teoria,13,"¿Qué es la sobreescritura de métodos (override)?"
+114,teoria,14,"¿Cuál es el rol de una clase base dentro de una jerarquía de herencia?"
+115,teoria,15,"¿Se puede instanciar directamente una clase marcada como 'abstract'?"
+116,teoria,16,"¿Qué ocurre si una clase derivada no implementa todos los métodos abstractos de su clase padre abstracta?"
+117,teoria,17,"¿Qué hace la palabra clave 'base' dentro del constructor de una clase derivada en C#?"
+118,teoria,18,"¿Qué diferencia existe entre un campo privado y una propiedad pública en C#?"
+119,teoria,19,"¿Para qué se utilizan los descriptores 'get' y 'set' en las propiedades de C#?"
+120,teoria,20,"¿Qué es el operador ternario en C# y cuál es su sintaxis básica?"
+121,teoria,21,"¿Cuál es la diferencia principal entre un arreglo (array) y una lista (List) en C#?"
+122,teoria,22,"¿Qué propiedad se utiliza para obtener el tamaño de un arreglo unidimensional en C#?"
+123,teoria,23,"¿Qué propiedad se utiliza para obtener la cantidad de elementos en una List en C#?"
+124,teoria,24,"¿Qué método de List se utiliza para agregar un nuevo elemento al final de la lista?"
+125,teoria,25,"¿Qué método de List se utiliza para eliminar una instancia específica almacenada en la lista?"
+126,teoria,26,"¿Qué retorno otorga el método FindIndex de una List cuando no encuentra ninguna coincidencia?"
+127,teoria,27,"¿Qué función cumple la palabra clave 'this' en un método o constructor de C#?"
+128,teoria,28,"¿Qué es una excepción en .NET?"
+129,teoria,29,"¿Qué bloques se utilizan en C# para capturar y manejar excepciones de forma segura?"
+130,teoria,30,"¿Cuál es la función principal del bloque 'finally' en una estructura try-catch-finally?"
+31,teoria,31,"¿Qué palabra clave se usa para lanzar intencionalmente una excepción en C#?"
+32,teoria,32,"¿Qué excepción se produce en .NET al intentar dividir un número entero entre cero?"
+33,teoria,33,"¿Qué excepción se lanza al intentar convertir una cadena no numérica a un número entero con int.Parse?"
+34,teoria,34,"¿Para qué sirve el bloque 'checked' en C# respecto al manejo de tipos numéricos?"
+35,teoria,35,"¿Qué excepción se captura cuando una conversión dentro de un bloque 'checked' supera el límite del tipo de dato?"
+36,teoria,36,"¿Para qué sirve el filtro 'when' dentro de un bloque 'catch' en C#?"
+37,teoria,37,"¿Cómo se crea una excepción personalizada en C#?"
+38,teoria,38,"¿Qué es Minimal APIs en .NET?"
+39,teoria,39,"¿Cuál es el punto de entrada principal y archivo estándar de una aplicación de Minimal APIs?"
+40,teoria,40,"¿Qué comando de la CLI de .NET se usa para crear un nuevo proyecto de tipo web con Minimal APIs?"
+41,teoria,41,"¿Qué método de WebApplication se utiliza para definir un endpoint que maneje peticiones de tipo GET?"
+42,teoria,42,"¿Qué método de WebApplication se utiliza para mapear peticiones de tipo POST?"
+43,teoria,43,"¿Qué método de WebApplication se utiliza para mapear peticiones de tipo PUT?"
+44,teoria,44,"¿Qué método de WebApplication se utiliza para mapear peticiones de tipo DELETE?"
+45,teoria,45,"¿Qué método de WebApplication se utiliza para mapear peticiones de tipo PATCH?"
+46,teoria,46,"¿Qué clase estática provee métodos auxiliares para estructurar respuestas HTTP semánticas en Minimal APIs?"
+47,teoria,47,"¿Qué código de estado HTTP y método de Results se devuelve habitualmente ante una creación exitosa mediante POST?"
+48,teoria,48,"¿Qué método de Results devuelve un estado HTTP 200 OK con un objeto serializado a JSON?"
+49,teoria,49,"¿Qué método de Results representa una respuesta con código de estado HTTP 404 Not Found?"
+50,teoria,50,"¿Qué método de Results representa una respuesta con código de estado HTTP 400 Bad Request?"
+51,teoria,51,"¿Qué método de Results se utiliza comúnmente para confirmar una eliminación exitosa sin devolver contenido (204 No Content)?"
+52,teoria,52,"¿Qué es un Route Parameter (parámetro de ruta) en una Web API?"
+53,teoria,53,"¿Qué es un Query Parameter (parámetro de consulta) en una petición HTTP?"
+54,teoria,54,"¿En qué parte de la petición HTTP se envía habitualmente la información enviada mediante POST para crear un objeto?"
+55,teoria,55,"¿Qué proceso realiza automáticamente .NET al recibir una cadena JSON en el cuerpo de una petición POST mapeada a un objeto?"
+56,teoria,56,"¿Qué es la deserialización automática en el contexto de las Web APIs?"
+57,teoria,57,"¿Qué es un Middleware en el contexto de .NET y Web APIs?"
+58,teoria,58,"¿Cuál es el patrón de ejecución o estructura visual típico que representan los Middlewares en la tubería de peticiones?"
+59,teoria,59,"¿Cuál es la función del método app.Use en la canalización de peticiones de .NET?"
+60,teoria,60,"¿Cómo se leen las cabeceras (Headers) de una petición entrante a partir del objeto HttpContext en C#?"
+61,teoria,61,"¿Qué método se utiliza sobre las cabeceras de HttpContext para verificar si existe una clave específica sin lanzar excepciones?"
+62,teoria,62,"¿Qué tipo de dato inmutable introducido en C# 9 es ideal para definir modelos DTO o esquemas de entrada/salida simples?"
+63,teoria,63,"¿Dónde se suele configurar el puerto y las URLs de escucha de la aplicación en desarrollo dentro del proyecto de .NET?"
+64,teoria,64,"¿Qué comando de la CLI de .NET ejecuta la aplicación y recompila automáticamente al detectar cambios de código?"
+65,teoria,65,"¿Qué comando de la CLI de .NET se utiliza únicamente para verificar que no haya errores de sintaxis o compilación?"
+66,teoria,66,"¿Qué comando de la CLI de .NET compila y ejecuta el proyecto directamente desde la consola?"
+67,teoria,67,"¿Cuál es la relación principal descrita por el concepto de Herencia entre clases?"
+68,teoria,68,"¿Cuál es la diferencia fundamental entre el método PUT y el método PATCH en peticiones HTTP?"
+69,teoria,69,"¿Qué diferencia hay entre una clase abstracta y una clase concreta en POO?"
+70,teoria,70,"¿Qué permite hacer la directiva '#region' en el editor de código de C#?"
+71,teoria,71,"¿Cómo se itera sobre todos los elementos de una colección o lista utilizando un bucle foreach en C#?"
+72,teoria,72,"¿Qué diferencia existe entre un bucle for tradicional y un bucle foreach al recorrer un arreglo?"
+73,teoria,73,"¿Qué sucede si se intenta acceder a un índice inexistente en un arreglo de C#?"
+74,teoria,74,"¿Qué tipo de valor retorna el método FindIndex de una List cuando el elemento buscado no existe?"
+75,teoria,75,"¿Por qué se considera que las interfaces favorecen el desacoplamiento de código?"
+76,teoria,76,"¿Puede una clase en C# heredar de múltiples clases padre simultáneamente?"
+77,teoria,77,"¿Puede una clase en C# implementar múltiples interfaces?"
+78,teoria,78,"¿Qué es una propiedad con la sintaxis '{ get; set; }' sin cuerpo explícito?"
+79,teoria,79,"¿Para qué sirve definir el modificador 'protected set' en una propiedad de una clase base?"
+80,teoria,80,"¿Qué representa la palabra clave 'const' al declarar un atributo dentro de una clase?"
+81,teoria,81,"¿Qué es el Model Binding en Minimal APIs de .NET?"
+82,teoria,82,"¿Qué ocurre si un cliente envía un tipo de dato incompatible al esperar un entero en un Route Parameter en Minimal APIs?"
+83,teoria,83,"¿Cuál es el propósito del archivo de entrada Program.cs en la arquitectura de Minimal APIs?"
+84,teoria,84,"¿Qué diferencia a las Minimal APIs respecto a la arquitectura tradicional de Controladores en ASP.NET Core?"
+85,teoria,85,"¿Cómo se define un parámetro de ruta opcional o nullable en C# dentro de la firma de un endpoint?"
+86,teoria,86,"¿Qué clase o tipo de retorno se utiliza en C# para trabajar de forma asíncrona dentro de Middlewares o endpoints?"
+87,teoria,87,"¿Qué hace la palabra clave 'async' en la definición de un método o expresión lambda en C#?"
+88,teoria,88,"¿Qué permite hacer la palabra clave 'await' dentro de un método asíncrono?"
+89,teoria,89,"¿Qué ventaja ofrece el tipado fuerte de C# en el desarrollo de Web APIs frente a lenguajes dinámicos como JavaScript?"
+90,teoria,90,"¿Qué representa el Virtual DOM en bibliotecas del lado cliente como React y cuál es su objetivo?"
+91,teoria,91,"¿Qué es JSX en React y cómo se relaciona con JavaScript?"
+92,teoria,92,"¿Qué Hook de React permite almacenar y actualizar el estado interno de un componente?"
+93,teoria,93,"¿Qué Hook de React se utiliza para gestionar efectos secundarios como la petición de datos a una API externa?"
+94,teoria,94,"¿Cuál es el propósito del array de dependencias en el Hook useEffect de React?"
+95,teoria,95,"¿Para qué se utiliza 'event.preventDefault()' al procesar el envío de un formulario en React?"
+96,teoria,96,"¿Cómo se transfieren datos o funciones desde un componente padre hacia un componente hijo en React?"
+97,teoria,97,"¿Qué herramienta o empaquetador moderno se menciona en la guía para crear proyectos rápidos de React?"
+98,teoria,98,"¿Qué comando de terminal se utiliza para instalar las dependencias de un proyecto Node.js/React recién creado?"
+99,teoria,99,"¿Qué método de JavaScript/React se utiliza comúnmente para iterar una lista de objetos y renderizar elementos JSX?"
+100,teoria,100,"¿Qué rol cumple la API nativa 'fetch' en las aplicaciones web cliente?"
