@@ -50,7 +50,7 @@ export const SUBJECTS_CONFIG = {
     }
   },
   pi2: {
-    title: 'Proyecto Integrador 2',
+    title: 'Proyecto Informatico II',
     csvPath: '/datos-pi2.csv',
     themes: {
       primera_vuelta: {
